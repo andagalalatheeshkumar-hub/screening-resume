@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TalentFlow - Resume Screening & ATS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Lucide Icons for modern, clean iconography -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="dark-theme">
+    <div class="app-container">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="brand">
+                <div class="brand-logo">
+                    <i data-lucide="layers" class="logo-icon"></i>
+                </div>
+                <span class="brand-name">TalentFlow</span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#dashboard" class="nav-item active" onclick="switchTab('dashboard')">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#screen" class="nav-item" onclick="switchTab('screen')">
+                    <i data-lucide="scan-eye"></i>
+                    <span>Resume Screen</span>
+                </a>
+                <a href="#pipeline" class="nav-item" onclick="switchTab('pipeline')">
+                    <i data-lucide="kanban-square"></i>
+                    <span>ATS Pipeline</span>
+                </a>
+                <a href="#jobs" class="nav-item" onclick="switchTab('jobs')">
+                    <i data-lucide="briefcase"></i>
+                    <span>Job Board</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">HR</div>
+                    <div class="user-info">
+                        <span class="user-name">Recruiter Mode</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Top Header -->
+            <header class="header">
+                <button class="mobile-toggle" id="mobile-toggle">
+                    <i data-lucide="menu"></i>
+                </button>
+                <div class="header-title">
+                    <h1 id="page-title">Dashboard</h1>
+                    <p id="page-subtitle" class="text-muted">Welcome back! Here is your recruitment overview.</p>
+                </div>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="openScreenModal()">
+                        <i data-lucide="plus"></i>
+                        <span>Screen Resume</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Notification Toast Container -->
+            <div id="toast-container" class="toast-container"></div>
+
+            <!-- TAB 1: Dashboard View -->
+            <section id="dashboard-tab" class="tab-content active">
+                <div class="metrics-grid">
+                    <div class="metric-card glass">
+                        <div class="metric-header">
+                            <span class="metric-title">Total Candidates</span>
+                            <div class="metric-icon-box blue">
+                                <i data-lucide="users"></i>
+                            </div>
+                        </div>
+                        <span class="metric-value" id="stat-total-applicants">0</span>
+                        <span class="metric-subtext"><span class="trend-up">↑ 12%</span> vs last month</span>
+                    </div>
+                    <div class="metric-card glass">
+                        <div class="metric-header">
+                            <span class="metric-title">Average Match Score</span>
+                            <div class="metric-icon-box purple">
+                                <i data-lucide="award"></i>
+                            </div>
+                        </div>
+                        <span class="metric-value" id="stat-average-score">0%</span>
+                        <span class="metric-subtext"><span class="trend-up">↑ 4.2%</span> keyword density</span>
+                    </div>
+                    <div class="metric-card glass">
+                        <div class="metric-header">
+                            <span class="metric-title">Active Job Roles</span>
+                            <div class="metric-icon-box green">
+                                <i data-lucide="briefcase"></i>
+                            </div>
+                        </div>
+                        <span class="metric-value" id="stat-active-jobs">0</span>
+                        <span class="metric-subtext">Open postings</span>
+                    </div>
+                </div>
+
+                <div class="dashboard-body">
+                    <!-- Funnel / Stats Box -->
+                    <div class="chart-container glass">
+                        <h3>Applicant Funnel</h3>
+                        <div class="funnel-container">
+                            <div class="funnel-stage">
+                                <div class="stage-label">Applied</div>
+                                <div class="stage-bar-wrapper">
+                                    <div class="stage-bar" id="bar-applied" style="width: 0%"></div>
+                                </div>
+                                <div class="stage-count" id="count-applied">0</div>
+                            </div>
+                            <div class="funnel-stage">
+                                <div class="stage-label">Screening</div>
+                                <div class="stage-bar-wrapper">
+                                    <div class="stage-bar" id="bar-screening" style="width: 0%"></div>
+                                </div>
+                                <div class="stage-count" id="count-screening">0</div>
+                            </div>
+                            <div class="funnel-stage">
+                                <div class="stage-label">Interview</div>
+                                <div class="stage-bar-wrapper">
+                                    <div class="stage-bar" id="bar-interview" style="width: 0%"></div>
+                                </div>
+                                <div class="stage-count" id="count-interview">0</div>
+                            </div>
+                            <div class="funnel-stage">
+                                <div class="stage-label">Offered</div>
+                                <div class="stage-bar-wrapper">
+                                    <div class="stage-bar" id="bar-offered" style="width: 0%"></div>
+                                </div>
+                                <div class="stage-count" id="count-offered">0</div>
+                            </div>
+                            <div class="funnel-stage">
+                                <div class="stage-label">Rejected</div>
+                                <div class="stage-bar-wrapper">
+                                    <div class="stage-bar" id="bar-rejected" style="width: 0%"></div>
+                                </div>
+                                <div class="stage-count" id="count-rejected">0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Applicants Table -->
+                    <div class="recent-applicants glass">
+                        <div class="card-header">
+                            <h3>Recent Applicants</h3>
+                            <button class="btn btn-text" onclick="switchTab('pipeline')">View Pipeline</button>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Target Role</th>
+                                        <th>Match Score</th>
+                                        <th>Status</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-applicants-list">
+                                    <!-- Populated dynamically -->
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">No applicants found.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: Resume Screening View -->
+            <section id="screen-tab" class="tab-content">
+                <div class="screening-panel">
+                    <div class="screening-form glass">
+                        <h3>Screen New Resume</h3>
+                        <p class="text-muted">Upload a resume and select the target job description to analyze. Text processing will execute instantly.</p>
+                        
+                        <form id="screening-form-element" onsubmit="handleScreeningSubmit(event)">
+                            <div class="form-group">
+                                <label for="screen-job-select">Target Job Role</label>
+                                <select id="screen-job-select" class="form-control" required>
+                                    <option value="" disabled selected>Select a Job Role...</option>
+                                    <!-- Seeded dynamically -->
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Upload Resume (PDF, DOCX, or TXT)</label>
+                                <div class="drop-zone" id="drop-zone">
+                                    <div class="drop-zone-content">
+                                        <i data-lucide="cloud-upload" class="drop-icon"></i>
+                                        <p class="drop-text">Drag & drop your resume file here or <span>browse</span></p>
+                                        <p class="drop-file-types text-muted">Supports PDF, DOCX, TXT (Max 10MB)</p>
+                                    </div>
+                                    <input type="file" id="resume-file-input" class="file-input" accept=".pdf,.docx,.txt" required>
+                                </div>
+                                <div id="selected-file-details" class="file-details hidden">
+                                    <i data-lucide="file-text"></i>
+                                    <span id="file-name-span">resume.pdf</span>
+                                    <button type="button" class="btn-remove" onclick="removeSelectedFile()">
+                                        <i data-lucide="x"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-block" id="btn-submit-screen">
+                                <i data-lucide="zap"></i>
+                                <span>Analyze Resume</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Output Results Drawer/Container -->
+                    <div class="screening-results glass empty-state" id="screening-results">
+                        <div class="results-placeholder">
+                            <i data-lucide="file-search"></i>
+                            <h4>Awaiting Analysis</h4>
+                            <p class="text-muted">Select a role, upload a resume and trigger the analyzer to evaluate candidate alignment.</p>
+                        </div>
+                        <div class="results-content hidden" id="results-content">
+                            <div class="results-header">
+                                <div class="candidate-meta">
+                                    <h2 id="result-name">Candidate Name</h2>
+                                    <div class="meta-badges">
+                                        <span class="badge" id="result-email"><i data-lucide="mail"></i> Email</span>
+                                        <span class="badge" id="result-phone"><i data-lucide="phone"></i> Phone</span>
+                                    </div>
+                                </div>
+                                <div class="score-circle-wrapper">
+                                    <svg class="score-ring" width="100" height="100">
+                                        <circle class="score-ring-bg" cx="50" cy="50" r="42"></circle>
+                                        <circle class="score-ring-fill" id="score-ring-fill" cx="50" cy="50" r="42"></circle>
+                                    </svg>
+                                    <div class="score-text" id="result-score">0%</div>
+                                </div>
+                            </div>
+
+                            <hr class="divider">
+
+                            <div class="skills-analysis">
+                                <div class="skills-box match">
+                                    <h4><i data-lucide="check-circle-2"></i> Matched Skills</h4>
+                                    <div class="skills-tags" id="result-matched-skills">
+                                        <!-- Dynamic tags -->
+                                    </div>
+                                </div>
+                                <div class="skills-box missing">
+                                    <h4><i data-lucide="alert-circle"></i> Missing Skills</h4>
+                                    <div class="skills-tags" id="result-missing-skills">
+                                        <!-- Dynamic tags -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="feedback-box">
+                                <h4>Screening Feedback & Suggestions</h4>
+                                <div class="feedback-text" id="result-feedback">
+                                    <!-- Dynamic description -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: ATS Pipeline View -->
+            <section id="pipeline-tab" class="tab-content">
+                <div class="pipeline-filters">
+                    <div class="filter-group">
+                        <label for="pipeline-job-filter">Filter by Job Role</label>
+                        <select id="pipeline-job-filter" class="form-control" onchange="filterPipeline()">
+                            <option value="all">All Jobs</option>
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pipeline-board" id="pipeline-board">
+                    <!-- Column 1: APPLIED -->
+                    <div class="pipeline-column" data-status="APPLIED">
+                        <div class="column-header">
+                            <span class="column-title">Applied</span>
+                            <span class="column-count" id="count-col-applied">0</span>
+                        </div>
+                        <div class="column-cards" id="cards-applied" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'APPLIED')">
+                            <!-- Cards -->
+                        </div>
+                    </div>
+
+                    <!-- Column 2: SCREENING -->
+                    <div class="pipeline-column" data-status="SCREENING">
+                        <div class="column-header">
+                            <span class="column-title">Screening</span>
+                            <span class="column-count" id="count-col-screening">0</span>
+                        </div>
+                        <div class="column-cards" id="cards-screening" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'SCREENING')">
+                            <!-- Cards -->
+                        </div>
+                    </div>
+
+                    <!-- Column 3: INTERVIEW -->
+                    <div class="pipeline-column" data-status="INTERVIEW">
+                        <div class="column-header">
+                            <span class="column-title">Interviewing</span>
+                            <span class="column-count" id="count-col-interview">0</span>
+                        </div>
+                        <div class="column-cards" id="cards-interview" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'INTERVIEW')">
+                            <!-- Cards -->
+                        </div>
+                    </div>
+
+                    <!-- Column 4: OFFERED -->
+                    <div class="pipeline-column" data-status="OFFERED">
+                        <div class="column-header">
+                            <span class="column-title">Offered</span>
+                            <span class="column-count" id="count-col-offered">0</span>
+                        </div>
+                        <div class="column-cards" id="cards-offered" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'OFFERED')">
+                            <!-- Cards -->
+                        </div>
+                    </div>
+
+                    <!-- Column 5: REJECTED -->
+                    <div class="pipeline-column" data-status="REJECTED">
+                        <div class="column-header">
+                            <span class="column-title">Rejected</span>
+                            <span class="column-count" id="count-col-rejected">0</span>
+                        </div>
+                        <div class="column-cards" id="cards-rejected" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'REJECTED')">
+                            <!-- Cards -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: Job Board View -->
+            <section id="jobs-tab" class="tab-content">
+                <div class="jobs-layout">
+                    <!-- Create Job Form -->
+                    <div class="job-form glass">
+                        <h3>Create Job Posting</h3>
+                        <p class="text-muted">Publish a new job role to match applicant resumes against.</p>
+                        
+                        <form id="create-job-form" onsubmit="handleCreateJob(event)">
+                            <div class="form-group">
+                                <label for="job-title-input">Job Title</label>
+                                <input type="text" id="job-title-input" class="form-control" placeholder="e.g. Senior Java Engineer" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label for="job-dept-input">Department</label>
+                                    <input type="text" id="job-dept-input" class="form-control" placeholder="e.g. Engineering" required>
+                                </div>
+                                <div class="form-group col">
+                                    <label for="job-loc-input">Location</label>
+                                    <input type="text" id="job-loc-input" class="form-control" placeholder="e.g. San Francisco, CA" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="job-desc-input">Description</label>
+                                <textarea id="job-desc-input" class="form-control" rows="4" placeholder="Brief summary of the role..." required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="job-req-input">Requirements & Skills (Key phrases, separated by newlines)</label>
+                                <textarea id="job-req-input" class="form-control" rows="5" placeholder="e.g. Java&#10;Spring Boot&#10;MySQL&#10;Git" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">
+                                <i data-lucide="save"></i>
+                                <span>Publish Job</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Job Listings List -->
+                    <div class="job-list-container">
+                        <h3>Active Job Listings</h3>
+                        <div class="jobs-list" id="jobs-list">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Candidate Detail View Modal -->
+    <div id="candidate-modal" class="modal">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h3>Candidate Profile</h3>
+                <button class="btn-close" onclick="closeCandidateModal()"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body" id="candidate-modal-body">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Screen Modal (Triggered from header) -->
+    <div id="screen-modal" class="modal">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h3>Screen a Resume</h3>
+                <button class="btn-close" onclick="closeScreenModal()"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="modal-job-select">Select Target Role</label>
+                    <select id="modal-job-select" class="form-control">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Drag & Drop Resume</label>
+                    <div class="drop-zone" id="modal-drop-zone">
+                        <div class="drop-zone-content">
+                            <i data-lucide="cloud-upload" class="drop-icon"></i>
+                            <p>Drag & drop resume here or <span>browse</span></p>
+                        </div>
+                        <input type="file" id="modal-file-input" class="file-input" accept=".pdf,.docx,.txt">
+                    </div>
+                    <div id="modal-file-details" class="file-details hidden">
+                        <i data-lucide="file-text"></i>
+                        <span id="modal-file-name-span">resume.pdf</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" onclick="triggerModalScreening()">
+                    <i data-lucide="zap"></i>
+                    <span>Start Screening</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

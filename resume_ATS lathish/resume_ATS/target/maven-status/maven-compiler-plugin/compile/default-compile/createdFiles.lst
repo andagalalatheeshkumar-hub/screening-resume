@@ -1,0 +1,9 @@
+com\resume\ats\service\ScreeningService.class
+com\resume\ats\service\ResumeParserService.class
+com\resume\ats\model\Applicant.class
+com\resume\ats\model\Job.class
+com\resume\ats\repository\JobRepository.class
+com\resume\ats\controller\JobController.class
+com\resume\ats\controller\ApplicantController.class
+com\resume\ats\ResumeAtsApplication.class
+com\resume\ats\repository\ApplicantRepository.class
